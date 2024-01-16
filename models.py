@@ -12,12 +12,19 @@ def model(estimator, data: pd.DataFrame, params: dict):
     training_result = classifier.cv_results_
     x_label = [item for item in training_result['params']]
     y_values = training_result['mean_test_score']
+    print(f'{estimator.__class__.__name__} Ready')
     y_pred = classifier.predict(x_test)
+    y_pred_prob = None
+    if hasattr(classifier, 'predict_proba') and callable(classifier.predict_proba):
+        y_pred_prob = classifier.predict_proba(x_test)[:, 1]
+    else:
+        y_pred_prob = classifier.decision_function(x_test)
     accuracy = accuracy_score(y_test, y_pred)
     cmatrix = confusion_matrix(y_test, y_pred)
-    fpr, tpr, threshold = roc_curve(y_test, y_pred)
+    fpr, tpr, threshold = roc_curve(y_test, y_pred_prob)
     roc_auc = auc(fpr, tpr)
     return {
+        'name': estimator.__class__.__name__,
         'x_label': x_label,
         'y_value': y_values,
         'accuracy': accuracy,
@@ -26,5 +33,3 @@ def model(estimator, data: pd.DataFrame, params: dict):
         'tpr': tpr,
         'auc': roc_auc
     }
-
-

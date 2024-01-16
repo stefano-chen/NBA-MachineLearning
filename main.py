@@ -16,7 +16,7 @@ def compare_techniques(data: pd.DataFrame):
         'criterion': ['gini', 'entropy', 'log_loss']
     }))
     results.append(model(RandomForestClassifier(), data, {
-        'n_estimators': [200, 250, 300, 350, 400]
+        'n_estimators': [50, 100, 150, 200, 250]
     }))
     results.append(model(LinearSVC(dual='auto'), data, {
         'C': [1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
@@ -26,8 +26,15 @@ def compare_techniques(data: pd.DataFrame):
         'n_neighbors': [50, 100, 150, 200, 250]
     }))
     results.append(model(DummyClassifier(), data, {}))
-    for result in results:
-        print(result)
+    names = [result['name'] for result in results]
+    accuracies = [round(result['accuracy'], 4) for result in results]
+    fpr = [result['fpr'] for result in results]
+    tpr = [result['tpr'] for result in results]
+    auc = [result['auc'] for result in results]
+    confusions = [result['confusion'] for result in results]
+    accuracy_plot(names, accuracies)
+    roc_auc_plot(names, fpr, tpr, auc)
+    confusion_matrix_display(confusions, names)
 
 
 if __name__ == '__main__':
