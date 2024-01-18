@@ -27,12 +27,14 @@ def compare_techniques(data: pd.DataFrame):
     }))
     results.append(model(DummyClassifier(), data, {}))
     names = [result['name'] for result in results]
+    training_scores = [result['training'] for result in results]
     accuracies = [round(result['accuracy'], 4) for result in results]
     fpr = [result['fpr'] for result in results]
     tpr = [result['tpr'] for result in results]
     auc = [result['auc'] for result in results]
     confusions = [result['confusion'] for result in results]
-    accuracy_plot(names, accuracies)
+    accuracy_plot(names, training_scores, 'Training')
+    accuracy_plot(names, accuracies, 'Testing')
     roc_auc_plot(names, fpr, tpr, auc)
     confusion_matrix_display(confusions, names)
 

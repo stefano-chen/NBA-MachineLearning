@@ -75,3 +75,5 @@ dataframe.drop(columns=['GAME_DATE_EST'], inplace=True)
 
 # Save the generated dataframe as csv file
 dataframe.to_csv('./datasets/nba.csv', index=False)
+
+dataframe.info()

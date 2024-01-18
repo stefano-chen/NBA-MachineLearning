@@ -12,7 +12,7 @@ def model(estimator, data: pd.DataFrame, params: dict):
     training_result = classifier.cv_results_
     x_label = [item for item in training_result['params']]
     y_values = training_result['mean_test_score']
-    print(f'{estimator.__class__.__name__} Ready')
+    print(f'{classifier.best_estimator_} Ready')
     y_pred = classifier.predict(x_test)
     y_pred_prob = None
     if hasattr(classifier, 'predict_proba') and callable(classifier.predict_proba):
@@ -25,8 +25,7 @@ def model(estimator, data: pd.DataFrame, params: dict):
     roc_auc = auc(fpr, tpr)
     return {
         'name': estimator.__class__.__name__,
-        'x_label': x_label,
-        'y_value': y_values,
+        'training': classifier.best_score_,
         'accuracy': accuracy,
         'confusion': cmatrix,
         'fpr': fpr,
