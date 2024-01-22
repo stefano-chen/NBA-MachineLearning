@@ -12,20 +12,21 @@ from models import *
 
 def compare_techniques(data: pd.DataFrame):
     results = []
-    results.append(model(DecisionTreeClassifier(), data, {
+    x_train, x_test, y_train, y_test = data_split(data, 'HOME_TEAM_WINS')
+    results.append(model(DecisionTreeClassifier(), x_train, x_test, y_train, y_test, {
         'criterion': ['gini', 'entropy', 'log_loss']
     }))
-    results.append(model(RandomForestClassifier(), data, {
+    results.append(model(RandomForestClassifier(), x_train, x_test, y_train, y_test, {
         'n_estimators': [50, 100, 150, 200, 250]
     }))
-    results.append(model(LinearSVC(dual='auto'), data, {
-        'C': [1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
+    results.append(model(LinearSVC(dual='auto'), x_train, x_test, y_train, y_test, {
+        'C': [1e-5, 1e-4, 1e-3, 1e-1, 1]
     }))
-    results.append(model(GaussianNB(), data, {}))
-    results.append(model(KNeighborsClassifier(), data, {
+    results.append(model(GaussianNB(), x_train, x_test, y_train, y_test, {}))
+    results.append(model(KNeighborsClassifier(), x_train, x_test, y_train, y_test, {
         'n_neighbors': [50, 100, 150, 200, 250]
     }))
-    results.append(model(DummyClassifier(), data, {}))
+    results.append(model(DummyClassifier(), x_train, x_test, y_train, y_test, {}))
     names = [result['name'] for result in results]
     training_scores = [result['training'] for result in results]
     accuracies = [round(result['accuracy'], 4) for result in results]
