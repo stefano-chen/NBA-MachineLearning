@@ -15,18 +15,18 @@ def compare_techniques(data: pd.DataFrame):
     x_train, x_test, y_train, y_test = data_split(data, 'HOME_TEAM_WINS')
     results.append(model(DecisionTreeClassifier(), x_train, x_test, y_train, y_test, {
         'criterion': ['gini', 'entropy', 'log_loss']
-    }))
+    }, save_to_file=True, load_from_file=True))
     results.append(model(RandomForestClassifier(), x_train, x_test, y_train, y_test, {
         'n_estimators': [50, 100, 150, 200, 250]
-    }))
+    }, save_to_file=True, load_from_file=True))
     results.append(model(LinearSVC(dual='auto'), x_train, x_test, y_train, y_test, {
         'C': [1e-5, 1e-4, 1e-3, 1e-1, 1]
-    }))
-    results.append(model(GaussianNB(), x_train, x_test, y_train, y_test, {}))
+    }, save_to_file=True, load_from_file=True))
+    results.append(model(GaussianNB(), x_train, x_test, y_train, y_test, {}, save_to_file=True, load_from_file=True))
     results.append(model(KNeighborsClassifier(), x_train, x_test, y_train, y_test, {
         'n_neighbors': [50, 100, 150, 200, 250]
-    }))
-    results.append(model(DummyClassifier(), x_train, x_test, y_train, y_test, {}))
+    }, save_to_file=True, load_from_file=True))
+    results.append(model(DummyClassifier(), x_train, x_test, y_train, y_test, {}, save_to_file=True, load_from_file=True))
     names = [result['name'] for result in results]
     training_scores = [result['training'] for result in results]
     accuracies = [round(result['accuracy'], 4) for result in results]
