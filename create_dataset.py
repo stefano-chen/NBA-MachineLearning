@@ -15,6 +15,9 @@ games_details.dropna(inplace=True)
 
 # Only consider the useful columns
 # games = games[['HOME_TEAM_WINS', 'GAME_ID', 'GAME_DATE_EST', 'HOME_TEAM_ID', 'VISITOR_TEAM_ID', 'SEASON']]
+# games = games.drop(
+#     columns=['GAME_STATUS_TEXT', 'TEAM_ID_home', 'TEAM_ID_away', 'PTS_home', 'FG_PCT_home', 'FT_PCT_home',
+#              'FG3_PCT_home', 'AST_home', 'REB_home'])
 games = games.drop(columns=['GAME_STATUS_TEXT', 'TEAM_ID_home', 'TEAM_ID_away'])
 # Join between the games and ranking, so we can extract the winrate of the home team before a match
 merged = pd.merge(games, ranking, left_on=['HOME_TEAM_ID', 'GAME_DATE_EST'], right_on=['TEAM_ID', 'STANDINGSDATE'])
